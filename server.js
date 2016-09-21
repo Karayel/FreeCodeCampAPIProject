@@ -24,5 +24,5 @@ app.get('/:id', function(request, response){
 
 app.use('/', express.static('public', options));
 
-app.listen(8080);
+app.listen(process.env.PORT || 5000);
 
