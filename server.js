@@ -2,11 +2,7 @@ var express = require("express")
 var app = express()
 var date = require('date-and-time')
 
-var options = {
-  index: "index.html"
-};
-
-app.get('/:id', function(request, response){
+app.get('/timestamp/:id', function(request, response){
     var data = request.params.id
     var res;
     if(parseInt(data) || data === "0"){
@@ -22,7 +18,8 @@ app.get('/:id', function(request, response){
    response.json(res);
 });
 
-app.use('/', express.static('public', options));
+app.use('/',express.static('public',{index:"/index.html"}));
+app.use('/timestamp', express.static('public', {index:"/timestamp/index.html"}));
 
 app.listen(process.env.PORT || 5000);
 
