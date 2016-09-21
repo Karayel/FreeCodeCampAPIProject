@@ -10,9 +10,9 @@
 
 # Example usage:
 
-[https://timestamp-microservice-mkarayel.c9users.io/December%2015,%202015](https://timestamp-microservice-mkarayel.c9users.io/December%2015,%202015)
+[https://mk-timestamp-ms.herokuapp.com/December%2015,%202015](https://mk-timestamp-ms.herokuapp.com/December%2015,%202015)
 
-[https://timestamp-microservice-mkarayel.c9users.io/1450137600](https://timestamp-microservice-mkarayel.c9users.io/1450137600)
+[https://mk-timestamp-ms.herokuapp.com/1450137600](https://mk-timestamp-ms.herokuapp.com/1450137600)
 
 # Example output:
 
