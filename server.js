@@ -18,8 +18,17 @@ app.get('/timestamp/:id', function(request, response){
    response.json(res);
 });
 
+app.get('/requestheader/whoami',function(request,response){
+    var res ={ ipaddress: request.headers['x-forwarded-for'] || request.connection.remoteAddress,
+               language: request.headers["accept-language"].split(",")[0],
+               software: request.headers["user-agent"].match(/\((.*?)\)/)[1]
+             };
+   response.send(res);
+})
+
 app.use('/',express.static('public',{index:"/index.html"}));
 app.use('/timestamp', express.static('public', {index:"/timestamp/index.html"}));
+app.use('/requestheader', express.static('public', {index:"/requestheader/index.html"}));
 
 app.listen(process.env.PORT || 5000);
 
