@@ -1,34 +1,36 @@
 var express = require("express")
-var app = express()
-var date = require('date-and-time')
+var routes = require("./app/routes/index.js")
+var requestHeader = require("./app/api/requestheader-ms.js") 
+var timestamp = require("./app/api/timestamp-ms.js")
+var shortUrl = require("./app/api/shorturl-ms.js")
+var MongoClient = require('mongodb').MongoClient;
 
-app.get('/timestamp/:id', function(request, response){
-    var data = request.params.id
-    var res;
-    if(parseInt(data) || data === "0"){
-        res = {unix:parseInt(data),natural:date.format(new Date(parseInt(data) * 1000), 'MMMM DD, YYYY')};
-    }else{
-        if(date.isValid(data,'MMMM DD, YYYY')){
-            var time = new Date(data).getTime()/100
-            res = {unix:time,natural:data} 
-        }else{
-            res = {unix:null,natural:null}
-        }
-    }
-   response.json(res);
+var app = express()
+
+
+// Connection URL
+var url = 'mongodb://localhost:27017/ffc-service';
+
+// Use connect method to connect to the server
+MongoClient.connect(url, function(err, db) {
+  if (err)
+    console.log(err)
+  try{
+    console.log("Connected successfully to server");
+    db.createCollection("sites");
+    console.log(db.getCollectionNames())
+    shortUrl(app,db)
+  
+    db.close();
+  }catch(err){
+      console.log(err);
+  }
 });
 
-app.get('/requestheader/whoami',function(request,response){
-    var res ={ ipaddress: request.headers['x-forwarded-for'] || request.connection.remoteAddress,
-               language: request.headers["accept-language"].split(",")[0],
-               software: request.headers["user-agent"].match(/\((.*?)\)/)[1]
-             };
-   response.send(res);
-})
+requestHeader(app)
+timestamp(app)
 
-app.use('/',express.static('public',{index:"/index.html"}));
-app.use('/timestamp', express.static('public', {index:"/timestamp/index.html"}));
-app.use('/requestheader', express.static('public', {index:"/requestheader/index.html"}));
+routes(app,express);
 
 app.listen(process.env.PORT || 5000);
 
