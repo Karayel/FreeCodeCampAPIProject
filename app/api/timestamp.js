@@ -1,9 +1,9 @@
 //TIMESTAMP MICROSERVICE MODULE
-module.exports = function(app){
-    
-    var date = require('date-and-time')
-    
-    app.get('/timestamp/:id', function(request, response){
+
+var date = require('date-and-time');
+
+module.exports = {
+    getTimeStamp : function(request,callback){
         var data = request.params.id
         var res;
         if(parseInt(data) || data === "0"){
@@ -11,14 +11,11 @@ module.exports = function(app){
         }else{
             if(date.isValid(data,'MMMM DD, YYYY')){
                 var time = new Date(data).getTime()/100
-                res = {unix:time,natural:data} 
+                res = {unix:time,natural:data}
             }else{
                 res = {unix:null,natural:null}
             }
         }
-        response.json(res);
-    });
-    
-    
-    
+        callback(res);
+    }
 }
